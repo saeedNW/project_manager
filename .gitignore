@@ -1,0 +1,8 @@
+# secure directories
+.idea/
+
+# Dependency directories
+node_modules/
+
+# json files
+package-lock.json
