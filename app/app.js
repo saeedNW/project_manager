@@ -128,5 +128,10 @@ module.exports = class Application {
                 message: "this is your new web application with node and express"
             });
         });
+
+        /** import system main router */
+        const {mainRouter} = require("./router/router");
+        /** initialize system main router */
+        this.#app.use(mainRouter);
     }
 }
