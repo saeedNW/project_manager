@@ -34,12 +34,12 @@ const UserSchema = new mongoose.Schema({
         type: String,
         default: ["USER"]
     },
-    skulls: {
+    skills: {
         type: String,
         default: []
     },
     team: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
         default: []
     },
 }, {

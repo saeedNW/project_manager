@@ -12,6 +12,10 @@ const TeamSchema = new mongoose.Schema({
     description: {
         type: String
     },
+    owner: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true
+    },
     users: {
         type: mongoose.Schema.Types.ObjectId,
         default: []
