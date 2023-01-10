@@ -31,15 +31,15 @@ const UserSchema = new mongoose.Schema({
         required: true,
     },
     roles: {
-        type: String,
+        type: [String],
         default: ["USER"]
     },
     skills: {
-        type: String,
+        type: [String],
         default: []
     },
     team: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: [mongoose.Schema.Types.ObjectId],
         default: []
     },
 }, {
