@@ -72,6 +72,62 @@ class TeamController {
             next(err)
         }
     }
+
+    /**
+     * get all teams
+     * @param req express request
+     * @param res express response
+     * @param next express next function
+     */
+    getAllTeams(req, res, next) {
+        try {
+
+        } catch (err) {
+            next(err)
+        }
+    }
+
+    /**
+     * get a single team by id
+     * @param req express request
+     * @param res express response
+     * @param next express next function
+     */
+    getTeamById(req, res, next) {
+        try {
+
+        } catch (err) {
+            next(err)
+        }
+    }
+
+    /**
+     * get a single user teams
+     * @param req express request
+     * @param res express response
+     * @param next express next function
+     */
+    getTeamsByUser(req, res, next) {
+        try {
+
+        } catch (err) {
+            next(err)
+        }
+    }
+
+    /**
+     * get a single project teams
+     * @param req express request
+     * @param res express response
+     * @param next express next function
+     */
+    getTeamsByProject(req, res, next) {
+        try {
+
+        } catch (err) {
+            next(err)
+        }
+    }
 }
 
 /** export class controller */
