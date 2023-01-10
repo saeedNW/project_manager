@@ -53,9 +53,8 @@ async function checkUserExistence(searchOption) {
     /**
      * check database for user existence
      */
-    return !!userModel.findOne({...query})
+    return userModel.findOne({...query});
 }
-
 
 /**
  * convert Persian and Arabic numbers to English numbers
