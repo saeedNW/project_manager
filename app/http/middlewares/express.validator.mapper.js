@@ -3,6 +3,10 @@ const {validationResult} = require("express-validator");
 
 /**
  * remap express validator errors and changes its structure
+ * @param req express request
+ * @param res express response
+ * @param next express next function
+ * @returns {*}
  */
 function expressValidatorMapper(req, res, next) {
     /**
