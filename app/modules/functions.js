@@ -94,8 +94,31 @@ function throwNewError(message, status = 500) {
  * @returns {*}
  * @constructor
  */
-function tokenGenerator(payload) {
+function jwtTokenGenerator(payload) {
     return jwt.sign(payload, process.env.JWT_SECRET_KEY, {expiresIn: "365 days"});
+}
+
+/**
+ * verify json web token
+ * @param {string} token json web token
+ * @param {string} verificationField the field that should exist in token
+ * @param {string} errorMessage invalid token error message
+ * @param {number} errorStatus invalid token error status code
+ * @returns {*}
+ */
+function jwtTokenVerification(token, verificationField, errorMessage, errorStatus) {
+    /**
+     * verify jwt token
+     * @type {*}
+     */
+    const verificationResult = jwt.verify(token, process.env.JWT_SECRET_KEY);
+
+    /** return error if username wasn't define in token */
+    if (verificationResult?.[verificationField])
+        throwNewError(errorMessage, errorStatus);
+
+    /** return verification result */
+    return verificationResult;
 }
 
 module.exports = {
@@ -103,5 +126,6 @@ module.exports = {
     checkUserExistence,
     fixNumbers,
     throwNewError,
-    tokenGenerator
+    jwtTokenGenerator,
+    jwtTokenVerification
 }

@@ -3,7 +3,7 @@ const {userModel} = require("../../models/user");
 /** import bcryptjs module */
 const bcrypt = require("bcryptjs");
 /** import helper functions */
-const {hashString, checkUserExistence, fixNumbers, throwNewError, tokenGenerator} = require("../../modules/functions");
+const {hashString, checkUserExistence, fixNumbers, throwNewError, jwtTokenGenerator} = require("../../modules/functions");
 
 /**
  * auth class controller
@@ -90,7 +90,7 @@ class AuthController {
                 throwNewError("کاربری با این اطلاعات وجود ندارد", 401);
 
             /** create user json web token */
-            const token = tokenGenerator({username});
+            const token = jwtTokenGenerator({username});
 
             /** save token in user data */
             user.token = token;
