@@ -114,7 +114,7 @@ function jwtTokenVerification(token, verificationField, errorMessage, errorStatu
     const verificationResult = jwt.verify(token, process.env.JWT_SECRET_KEY);
 
     /** return error if username wasn't define in token */
-    if (verificationResult?.[verificationField])
+    if (!verificationResult?.[verificationField])
         throwNewError(errorMessage, errorStatus);
 
     /** return verification result */
