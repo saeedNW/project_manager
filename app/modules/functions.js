@@ -107,18 +107,24 @@ function jwtTokenGenerator(payload) {
  * @returns {*}
  */
 function jwtTokenVerification(token, verificationField, errorMessage, errorStatus) {
-    /**
-     * verify jwt token
-     * @type {*}
-     */
-    const verificationResult = jwt.verify(token, process.env.JWT_SECRET_KEY);
+    try {
+        /**
+         * verify jwt token
+         * @type {*}
+         */
+        const verificationResult = jwt.verify(token, process.env.JWT_SECRET_KEY);
 
-    /** return error if username wasn't define in token */
-    if (!verificationResult?.[verificationField])
+        /** return error if username wasn't define in token */
+        if (!verificationResult?.[verificationField])
+            throwNewError(errorMessage, errorStatus);
+
+        console.log(verificationResult)
+
+        /** return verification result */
+        return verificationResult;
+    } catch (err) {
         throwNewError(errorMessage, errorStatus);
-
-    /** return verification result */
-    return verificationResult;
+    }
 }
 
 module.exports = {
