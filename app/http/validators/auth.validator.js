@@ -1,6 +1,10 @@
 /** import express validator body method */
 const {body} = require("express-validator");
 
+/**
+ * register validation
+ * @returns {ValidationChain[]}
+ */
 function registerValidator() {
     return [
         /**
@@ -69,6 +73,29 @@ function registerValidator() {
     ]
 }
 
+/**
+ * login validation
+ * @returns {ValidationChain[]}
+ */
+function loginValidator() {
+    return [
+        /**
+         * username validation
+         */
+        body("username")
+            .notEmpty().withMessage("نام کاربری نباید خالی باشد"),
+        /**
+         * password validation
+         */
+        body("password")
+            /**
+             * check password length
+             */
+            .isLength({min: 6}).withMessage("رمز عبور باید حداقل 6 کاراکتر باشد")
+    ]
+}
+
 module.exports = {
-    registerValidator
+    registerValidator,
+    loginValidator
 }

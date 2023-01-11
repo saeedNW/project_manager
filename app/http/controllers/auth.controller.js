@@ -2,6 +2,8 @@
 const {userModel} = require("../../models/user");
 /** import helper functions */
 const {hashString, checkUserExistence, fixNumbers, throwNewError} = require("../../modules/functions");
+/** import bcryptjs module */
+const bcrypt = require("bcryptjs");
 
 /**
  * auth class controller
@@ -68,9 +70,31 @@ class AuthController {
      * @param res express response
      * @param next express next function
      */
-    login(req, res, next) {
-        try {
+    async login(req, res, next) {
+        /** extract data from request */
+        const {username, password} = req.body;
 
+        try {
+            /** get user data from database */
+            const user = await userModel.findOne({username});
+
+            /** return error if user was not found */
+            if (!user)
+                throwNewError("کاربری با این اطلاعات وجود ندارد", 401);
+
+            /** compare user password with given password */
+            const comparePassword = bcrypt.compareSync(password, user.password);
+
+            /** return error if password was incorrect */
+            if (!comparePassword)
+                throwNewError("کاربری با این اطلاعات وجود ندارد", 401);
+
+            return res.status(200).json({
+                status: 200,
+                success: true,
+                message: "شما با موفقیت وارد حساب خود شدید",
+                token: ""
+            })
         } catch (err) {
             next(err)
         }
