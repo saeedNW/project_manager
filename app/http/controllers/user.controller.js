@@ -10,8 +10,17 @@ class UserController {
      * @param next express next function
      */
     getUserProfile(req, res, next) {
-        try {
+        /** get user data from request */
+        const user = req.user;
 
+        try {
+            /** return user data */
+            return res.status(200).json({
+                status: 200,
+                success: true,
+                message: "درخواست شما با موفقیت به انجام رسید",
+                data: {user}
+            })
         } catch (err) {
             next(err)
         }
