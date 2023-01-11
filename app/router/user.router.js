@@ -10,6 +10,8 @@ const {UserController} = require("../http/controllers/user.controller");
 
 /** define user profile router */
 userRouter.get("/profile", checkLogin, UserController.getUserProfile);
+/** define user profile update router */
+userRouter.patch("/profile", checkLogin, UserController.editUserProfile);
 
 /** export user router */
 module.exports = {

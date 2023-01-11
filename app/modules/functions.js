@@ -31,9 +31,8 @@ function hashString(str) {
  * @returns {Promise<boolean>}
  */
 async function checkUserExistence(searchOption) {
-    /** define search query */
     /**
-     *
+     * define search query
      * @type {{}}
      */
     const query = {};
@@ -117,8 +116,6 @@ function jwtTokenVerification(token, verificationField, errorMessage, errorStatu
         /** return error if username wasn't define in token */
         if (!verificationResult?.[verificationField])
             throwNewError(errorMessage, errorStatus);
-
-        console.log(verificationResult)
 
         /** return verification result */
         return verificationResult;
