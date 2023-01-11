@@ -1,9 +1,9 @@
 /** import user model */
 const {userModel} = require("../../models/user");
-/** import helper functions */
-const {hashString, checkUserExistence, fixNumbers, throwNewError} = require("../../modules/functions");
 /** import bcryptjs module */
 const bcrypt = require("bcryptjs");
+/** import helper functions */
+const {hashString, checkUserExistence, fixNumbers, throwNewError, tokenGenerator} = require("../../modules/functions");
 
 /**
  * auth class controller
@@ -89,11 +89,20 @@ class AuthController {
             if (!comparePassword)
                 throwNewError("کاربری با این اطلاعات وجود ندارد", 401);
 
+            /** create user json web token */
+            const token = tokenGenerator({username});
+
+            /** save token in user data */
+            user.token = token;
+            /** update user data in database */
+            await user.save();
+
+            /** return success response */
             return res.status(200).json({
                 status: 200,
                 success: true,
                 message: "شما با موفقیت وارد حساب خود شدید",
-                token: ""
+                token
             })
         } catch (err) {
             next(err)

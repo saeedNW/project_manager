@@ -1,3 +1,6 @@
+/** initialize dotenv module */
+require('dotenv').config();
+
 /** import application main class */
 const Application = require("./app/app");
 

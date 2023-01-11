@@ -30,6 +30,9 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    token: {
+        type: String,
+    },
     roles: {
         type: [String],
         default: ["USER"]

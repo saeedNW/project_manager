@@ -4,6 +4,8 @@ const bcrypt = require('bcryptjs');
 const {default: mongoose} = require("mongoose");
 /** import user model */
 const {userModel} = require("../models/user");
+/** import JsonWebToken module */
+const jwt = require("jsonwebtoken");
 
 /**
  * hash a string
@@ -86,9 +88,20 @@ function throwNewError(message, status = 500) {
     throw error
 }
 
+/**
+ * create json web token based on given payload
+ * @param {Object} payload data that you want to use in json web token
+ * @returns {*}
+ * @constructor
+ */
+function tokenGenerator(payload) {
+    return jwt.sign(payload, process.env.JWT_SECRET_KEY, {expiresIn: "365 days"});
+}
+
 module.exports = {
     hashString,
     checkUserExistence,
     fixNumbers,
-    throwNewError
+    throwNewError,
+    tokenGenerator
 }
