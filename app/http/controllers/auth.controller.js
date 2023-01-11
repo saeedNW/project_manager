@@ -3,7 +3,13 @@ const {userModel} = require("../../models/user");
 /** import bcryptjs module */
 const bcrypt = require("bcryptjs");
 /** import helper functions */
-const {hashString, checkUserExistence, fixNumbers, throwNewError, jwtTokenGenerator} = require("../../modules/functions");
+const {
+    hashString,
+    checkUserExistence,
+    fixNumbers,
+    throwNewError,
+    jwtTokenGenerator
+} = require("../../modules/functions");
 
 /**
  * auth class controller
@@ -57,7 +63,7 @@ class AuthController {
                 status: 201,
                 success: true,
                 message: "کاربر با موفقیت ایجاد شد",
-                data: user
+                data: {user}
             })
         } catch (err) {
             next(err)
@@ -102,7 +108,7 @@ class AuthController {
                 status: 200,
                 success: true,
                 message: "شما با موفقیت وارد حساب خود شدید",
-                token
+                data: {token}
             })
         } catch (err) {
             next(err)
