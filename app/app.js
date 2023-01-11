@@ -69,13 +69,16 @@ module.exports = class Application {
         /** import mongoose module */
         const {default: mongoose} = require('mongoose');
 
+        /** set mongoose strictQuery option */
+        mongoose.set('strictQuery', false);
+
         /** create database connection */
         mongoose.connect(DB_URL, (err) => {
             /** throw error if there was any */
             if (err) throw err;
 
             console.log("database connected successfully");
-        })
+        });
     }
 
     /**
