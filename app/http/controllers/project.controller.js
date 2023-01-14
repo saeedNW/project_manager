@@ -1,3 +1,8 @@
+/** import project model */
+const {projectModel} = require("../../models/project");
+/** import helper function */
+const {throwNewError} = require("../../modules/functions");
+
 /**
  * project class controller
  * @class ProjectController
@@ -9,12 +14,27 @@ class ProjectController {
      * @param res express response
      * @param next express next function
      */
-    createProject(req, res, next) {
-        /** extract data from request body */
-        const {title, description, privateStatus} = req.body;
+    async createProject(req, res, next) {
+        /** extract user data from request */
+        const user = req.user;
 
         try {
-            res.json(req.body);
+            /** create project */
+            const project = await projectModel.create({
+                ...req.body,
+                owner: user._id
+            })
+
+            /** return error if project creation wasn't successful */
+            if (!project)
+                throwNewError("ایجاد پروژه با مشکل مواجه شد، لطفا مجددا تلاش نمایید", 500);
+
+            return res.status(201).json({
+                status: 201,
+                success: true,
+                message: "پروژه با موفقیت ایجاد شد",
+                data: {project}
+            })
         } catch (err) {
             next(err)
         }
