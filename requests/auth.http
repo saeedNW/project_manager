@@ -1,4 +1,4 @@
-###register request
+### register request
 POST http://localhost:3000/auth/register
 Content-Type: application/json
 
@@ -10,7 +10,7 @@ Content-Type: application/json
   "confirmPassword": "123456"
 }
 
-###login request
+### login request
 POST http://localhost:3000/auth/login
 Content-Type: application/json
 
