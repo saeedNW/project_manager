@@ -9,9 +9,11 @@ const {ProjectController} = require("../http/controllers/project.controller");
 const {createProjectValidator} = require("../http/validators/project.validator");
 /** import express validator mapper */
 const {expressValidatorMapper} = require("../http/middlewares/express.validator.mapper");
+/** import user login checker middleware */
+const {checkLogin} = require("../http/middlewares/check.login");
 
 /** define project creation router */
-projectRouter.post("/create", createProjectValidator, expressValidatorMapper, ProjectController.createProject);
+projectRouter.post("/create", checkLogin, createProjectValidator(), expressValidatorMapper, ProjectController.createProject);
 
 /** export project router */
 module.exports = {
