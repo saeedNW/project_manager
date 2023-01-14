@@ -108,6 +108,48 @@ class UserController {
     }
 
     /**
+     * update user profile
+     * @param req express request
+     * @param res express response
+     * @param next express next function
+     */
+    updateProfileImage(req, res, next) {
+        /** get user data from request */
+        const user = req.user;
+
+        try {
+            /** throw error if file didn't found */
+            if (Object.keys(req.file).length <= 0)
+                throwNewError("شما باید یک فابل به جهت آپلود انتخاب کنید", 422);
+
+            /**
+             * get file path
+             */
+            const filePath = req.file?.path.replaceAll("\\", "/").substring(7);
+
+            /** update user profile pic */
+            const updateUser = userModel.updateOne({_id: user._id}, {
+                $set: {
+                    profile_image: filePath
+                }
+            });
+
+            /** throw error if update was unsuccessful */
+            if (updateUser.modifiedCount <= 0)
+                throwNewError("بروزرسانی انجام نشد", 400);
+
+            res.status(200).json({
+                status: 200,
+                success: true,
+                message: "بروزرسانی با موفقیت انجام شد",
+                data: {image: filePath}
+            });
+        } catch (err) {
+            next(err)
+        }
+    }
+
+    /**
      * user add skill
      * @param req express request
      * @param res express response

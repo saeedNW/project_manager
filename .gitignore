@@ -4,5 +4,8 @@
 # Dependency directories
 node_modules/
 
+# upload directory
+public/upload/
+
 # json files
 package-lock.json
