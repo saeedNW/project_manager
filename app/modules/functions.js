@@ -6,6 +6,10 @@ const {default: mongoose} = require("mongoose");
 const {userModel} = require("../models/user");
 /** import JsonWebToken module */
 const jwt = require("jsonwebtoken");
+/** import path module */
+const path = require("path");
+/** import file system module */
+const fs = require("fs");
 
 /**
  * hash a string
@@ -124,11 +128,58 @@ function jwtTokenVerification(token, verificationField, errorMessage, errorStatu
     }
 }
 
+/**
+ * create uploaded file path
+ * @returns {*}
+ */
+function createUploadPath(){
+    /**
+     * get current date
+     * @type {Date}
+     */
+    let d = new Date();
+
+    /**
+     * get current year
+     * @type {string}
+     */
+    const Year = ""+d.getFullYear();
+
+    /**
+     * get current month
+     * @type {string}
+     */
+    const Month = d.getMonth() + "";
+
+    /**
+     * get current day
+     * @type {string}
+     */
+    const day = "" + d.getDate();
+
+    /**
+     * define upload path
+     * @type {string}
+     */
+    const uploadPath = path.join(__dirname, "..", "..", "public", "upload", Year, Month, day);
+
+    /**
+     * create upload path if doesn't exist
+     */
+    fs.mkdirSync(uploadPath, {recursive : true});
+
+    /**
+     * return upload path
+     */
+    return path.join("public", "upload", Year, Month, day);
+}
+
 module.exports = {
     hashString,
     checkUserExistence,
     fixNumbers,
     throwNewError,
     jwtTokenGenerator,
-    jwtTokenVerification
+    jwtTokenVerification,
+    createUploadPath
 }

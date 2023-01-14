@@ -11,6 +11,9 @@ const UserSchema = new mongoose.Schema({
     last_name: {
         type: String
     },
+    profile_image: {
+        type: String
+    },
     username: {
         type: String,
         required: true,
