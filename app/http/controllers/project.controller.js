@@ -10,8 +10,11 @@ class ProjectController {
      * @param next express next function
      */
     createProject(req, res, next) {
-        try {
+        /** extract data from request body */
+        const {title, description, privateStatus} = req.body;
 
+        try {
+            res.json(req.body);
         } catch (err) {
             next(err)
         }

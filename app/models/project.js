@@ -23,10 +23,14 @@ const ProjectSchema = new mongoose.Schema({
     team: {
         type: mongoose.Schema.Types.ObjectId,
     },
-    private: {
+    privateStatus: {
         type: Boolean,
         default: true
     },
+    tags: {
+        type: [String],
+        default: []
+    }
 }, {
     timestamps: true
 });
