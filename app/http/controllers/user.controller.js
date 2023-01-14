@@ -113,7 +113,7 @@ class UserController {
      * @param res express response
      * @param next express next function
      */
-    updateProfileImage(req, res, next) {
+    async updateProfileImage(req, res, next) {
         /** get user data from request */
         const user = req.user;
 
@@ -128,7 +128,7 @@ class UserController {
             const filePath = req.file?.path.replaceAll("\\", "/").substring(7);
 
             /** update user profile pic */
-            const updateUser = userModel.updateOne({_id: user._id}, {
+            const updateUser = await userModel.updateOne({_id: user._id}, {
                 $set: {
                     profile_image: filePath
                 }
