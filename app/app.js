@@ -112,6 +112,9 @@ module.exports = class Application {
              */
             const message = error?.message || "Internal server error";
 
+            /** log the error in console */
+            console.error(error);
+
             /** return error */
             return res.status(status).json({
                 status,
