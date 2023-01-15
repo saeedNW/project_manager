@@ -2,12 +2,25 @@
 const {projectModel} = require("../../models/project");
 /** import helper function */
 const {throwNewError} = require("../../modules/functions");
+/** import auto-bind module */
+const autoBind = require("auto-bind");
 
 /**
  * project class controller
  * @class ProjectController
  */
 class ProjectController {
+    /**
+     * ProjectController class constructor
+     */
+    constructor() {
+        /**
+         * use auto-bind module to bind "this"
+         * to the ProjectController class
+         */
+        autoBind(this);
+    }
+
     /**
      * project creation controller
      * @param req express request
