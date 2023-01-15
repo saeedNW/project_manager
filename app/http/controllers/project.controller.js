@@ -46,9 +46,18 @@ class ProjectController {
      * @param res express response
      * @param next express next function
      */
-    getAllProjects(req, res, next) {
+    async getAllProjects(req, res, next) {
         try {
+            /** get all projects from database */
+            const projects = await projectModel.find({});
 
+            /** return success response */
+            return res.status(200).json({
+                status: 200,
+                success: true,
+                message: "درخواست شما با موفقیت به اتمام رسید",
+                data: {projects}
+            });
         } catch (err) {
             next(err)
         }
