@@ -23,7 +23,7 @@ const ProjectSchema = new mongoose.Schema({
     team: {
         type: mongoose.Schema.Types.ObjectId,
     },
-    privateStatus: {
+    private_status: {
         type: Boolean,
         default: true
     },
