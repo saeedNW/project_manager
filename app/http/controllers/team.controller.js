@@ -100,9 +100,18 @@ class TeamController {
      * @param res express response
      * @param next express next function
      */
-    getAllTeams(req, res, next) {
+    async getAllTeams(req, res, next) {
         try {
+            /** get all teams data from database */
+            const teams = await teamModel.find({});
 
+            /** return success response */
+            return res.status(200).json({
+                status: 200,
+                success: true,
+                message: "درخواست شما با موفقیت به اتمام رسید",
+                data: {teams}
+            })
         } catch (err) {
             next(err)
         }

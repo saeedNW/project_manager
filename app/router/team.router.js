@@ -14,6 +14,8 @@ const {expressValidatorMapper} = require("../http/middlewares/express.validator.
 
 /** define team creation router */
 teamRouter.post("/create", checkLogin, createTeamValidation(), expressValidatorMapper, TeamController.createTeam);
+/** define get all teams router */
+teamRouter.get("/list-all", checkLogin, TeamController.getAllTeams);
 
 /** export team router */
 module.exports = {
