@@ -69,9 +69,23 @@ class ProjectController {
      * @param res express response
      * @param next express next function
      */
-    getProjectById(req, res, next) {
-        try {
+    async getProjectById(req, res, next) {
+        /** get user _id as project owner */
+        const owner = req.user._id;
+        /** get project id from request */
+        const {id: projectId} = req.params;
 
+        try {
+            /** get project data */
+            const project = await this.findProject("_id", projectId, owner);
+
+            /** return success response */
+            return res.status(200).json({
+                status: 200,
+                success: true,
+                message: "درخواست شما با موفقیت به اتمام رسید",
+                data: {project}
+            });
         } catch (err) {
             next(err)
         }
@@ -145,6 +159,34 @@ class ProjectController {
         } catch (err) {
             next(err)
         }
+    }
+
+    /**
+     * find and return project data based on given search options
+     * @param {string} mainSearchFiledName the name of the main filed that you want to search based on. like "_id" or "user"
+     * @param {string} mainSearchFiledValue the value of the main filed that you want to search based on.
+     * @param {string|null} owner
+     * @returns {Promise<*>}
+     */
+    async findProject(mainSearchFiledName, mainSearchFiledValue, owner = null) {
+        /** define search query */
+        const query = {
+            [mainSearchFiledName]: mainSearchFiledValue
+        };
+
+        /** add owner option to search query if it wasn't null */
+        if (owner)
+            query["owner"] = owner;
+
+        /** get project from database */
+        const project = await projectModel.findOne({...query});
+
+        /** return error if project was not found */
+        if (!project)
+            throwNewError("پروژه ای با این شنایه یافت نشد", 404);
+
+        /** return project data */
+        return project;
     }
 }
 

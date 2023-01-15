@@ -15,11 +15,15 @@ const {checkLogin} = require("../http/middlewares/check.login");
 const {uploadFile} = require("../modules/express.fileupload");
 /** import express file upload module */
 const expressFileUpload = require("express-fileupload");
+/** import mongodb ObjectId validator */
+const {mongoIDValidator} = require("../http/validators/public.validator");
 
 /** define project creation router */
 projectRouter.post("/create", expressFileUpload(), checkLogin, uploadFile, createProjectValidator(), expressValidatorMapper, ProjectController.createProject);
 /** define get all projects' data router */
 projectRouter.get("/all", checkLogin, ProjectController.getAllProjects);
+/** define get all projects' data router */
+projectRouter.get("/single/:id", checkLogin, mongoIDValidator(), expressValidatorMapper, ProjectController.getProjectById);
 
 /** export project router */
 module.exports = {
