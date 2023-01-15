@@ -18,6 +18,8 @@ const expressFileUpload = require("express-fileupload");
 
 /** define project creation router */
 projectRouter.post("/create", expressFileUpload(), checkLogin, uploadFile, createProjectValidator(), expressValidatorMapper, ProjectController.createProject);
+/** define get all projects' data router */
+projectRouter.get("/all", checkLogin, ProjectController.getAllProjects);
 
 /** export project router */
 module.exports = {
