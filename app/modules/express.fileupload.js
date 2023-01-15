@@ -41,7 +41,7 @@ const uploadFile = async (req, res, next) => {
          * save image path in request body
          * @type {string}
          */
-        req.body.image = image_path.substring(7);
+        req.body.image = req.protocol + "://" + req.get("host") + "/" + image_path.replaceAll("\\", "/").substring(7);
 
         /**
          * define image upload path (directory)

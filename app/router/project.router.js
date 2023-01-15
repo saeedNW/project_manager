@@ -15,11 +15,21 @@ const {checkLogin} = require("../http/middlewares/check.login");
 const {uploadFile} = require("../modules/express.fileupload");
 /** import express file upload module */
 const expressFileUpload = require("express-fileupload");
+/** import mongodb ObjectId validator */
+const {mongoIDValidator} = require("../http/validators/public.validator");
 
 /** define project creation router */
 projectRouter.post("/create", expressFileUpload(), checkLogin, uploadFile, createProjectValidator(), expressValidatorMapper, ProjectController.createProject);
 /** define get all projects' data router */
 projectRouter.get("/all", checkLogin, ProjectController.getAllProjects);
+/** define get single project's data router */
+projectRouter.get("/single/:id", checkLogin, mongoIDValidator(), expressValidatorMapper, ProjectController.getProjectById);
+/** define remove single project router */
+projectRouter.delete("/remove/:id", checkLogin, mongoIDValidator(), expressValidatorMapper, ProjectController.removeProject);
+/** define edit project router */
+projectRouter.patch("/edit/:id", checkLogin, mongoIDValidator(), createProjectValidator(), expressValidatorMapper, ProjectController.updateProject);
+/** define project image upload router */
+projectRouter.patch("/image/:id", expressFileUpload(), checkLogin, uploadFile, mongoIDValidator(), expressValidatorMapper, ProjectController.updateProjectImage);
 
 /** export project router */
 module.exports = {

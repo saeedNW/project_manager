@@ -125,7 +125,7 @@ class UserController {
             /**
              * get file path
              */
-            const filePath = req.file?.path.replaceAll("\\", "/").substring(7);
+            const filePath = req.protocol + "://" + req.get("host") + "/" + req.file?.path.replaceAll("\\", "/").substring(7);
 
             /** update user profile pic */
             const updateUser = await userModel.updateOne({_id: user._id}, {
