@@ -201,6 +201,46 @@ class ProjectController {
     }
 
     /**
+     *
+     * @param req
+     * @param res
+     * @param next
+     */
+    async updateProjectImage(req, res, next) {
+        /** get user _id as project owner */
+        const owner = req.user._id;
+        /** get project id from request */
+        const {id: projectId} = req.params;
+        /** get image from request body */
+        const {image} = req.body;
+
+        try {
+            /** get project data */
+            await this.findProject("_id", projectId, owner);
+
+            /** update project */
+            const updatedProject = await projectModel.updateOne({_id: projectId}, {
+                $set: {
+                    image
+                }
+            });
+
+            /** throw error if update wasn't successful */
+            if (updatedProject.modifiedCount <= 0)
+                throwNewError("بروزرسانی انجام نشد", 400);
+
+            /** return success response */
+            return res.status(200).json({
+                status: 200,
+                success: true,
+                message: "اطلاعات با موفقیت بروزرسانی شد",
+            });
+        } catch (err) {
+            next(err)
+        }
+    }
+
+    /**
      * remove project
      * @param req express request
      * @param res express response

@@ -28,6 +28,8 @@ projectRouter.get("/single/:id", checkLogin, mongoIDValidator(), expressValidato
 projectRouter.delete("/remove/:id", checkLogin, mongoIDValidator(), expressValidatorMapper, ProjectController.removeProject);
 /** define edit project router */
 projectRouter.patch("/edit/:id", checkLogin, mongoIDValidator(), createProjectValidator(), expressValidatorMapper, ProjectController.updateProject);
+/** define project image upload router */
+projectRouter.patch("/image/:id", expressFileUpload(), checkLogin, uploadFile, mongoIDValidator(), expressValidatorMapper, ProjectController.updateProjectImage);
 
 /** export project router */
 module.exports = {
