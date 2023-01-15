@@ -22,8 +22,10 @@ const {mongoIDValidator} = require("../http/validators/public.validator");
 projectRouter.post("/create", expressFileUpload(), checkLogin, uploadFile, createProjectValidator(), expressValidatorMapper, ProjectController.createProject);
 /** define get all projects' data router */
 projectRouter.get("/all", checkLogin, ProjectController.getAllProjects);
-/** define get all projects' data router */
+/** define get single project's data router */
 projectRouter.get("/single/:id", checkLogin, mongoIDValidator(), expressValidatorMapper, ProjectController.getProjectById);
+/** define remove single project router */
+projectRouter.delete("/remove/:id", checkLogin, mongoIDValidator(), expressValidatorMapper, ProjectController.removeProject);
 
 /** export project router */
 module.exports = {

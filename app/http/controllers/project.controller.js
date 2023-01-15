@@ -139,9 +139,30 @@ class ProjectController {
      * @param res express response
      * @param next express next function
      */
-    removeProject(req, res, next) {
-        try {
+    async removeProject(req, res, next) {
+        /** get user _id as project owner */
+        const owner = req.user._id;
+        /** get project id from request */
+        const {id: projectId} = req.params;
 
+        try {
+            /** get project data */
+            await this.findProject("_id", projectId, owner);
+
+            /** remove project */
+            const removedProject = await projectModel.deleteOne({_id: projectId});
+
+            /** return error if project didn't removed */
+            if (removedProject.deleteCount <= 0)
+                throwNewError("درخواست ناموفق، لطفا مجددا تلاش نمایید", 400);
+
+            /** return success response */
+            return res.status(200).json({
+                status: 200,
+                success: true,
+                message: "درخواست شما با موفقیت به اتمام رسید",
+                data: {removedProject}
+            });
         } catch (err) {
             next(err)
         }
