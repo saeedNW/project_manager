@@ -5,6 +5,11 @@ const {default: mongoose} = require("mongoose");
  * define team database model schema
  */
 const TeamSchema = new mongoose.Schema({
+    team_id: {
+        type: String,
+        required: true,
+        unique: true,
+    },
     title: {
         type: String,
         required: true,

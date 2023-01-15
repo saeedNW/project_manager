@@ -1,0 +1,10 @@
+### create team with empty tags
+POST http://localhost:3000/team/create
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlNOVzEzIiwiaWF0IjoxNjczNDM0NzMwLCJleHAiOjE3MDQ5NzA3MzB9.DNO0kV3GcwMui02LOmUt14VPlCBIIqyymvJWAxqdCog
+Content-Type: application/json
+
+{
+  "title": "title of new team",
+  "description": "text of new team for team manager of node js course",
+  "team_id": "first_team"
+}

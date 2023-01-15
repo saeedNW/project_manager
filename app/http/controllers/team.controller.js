@@ -1,3 +1,8 @@
+/** import team model */
+const {teamModel} = require("../../models/team");
+/** import error sender function */
+const {throwNewError} = require("../../modules/functions");
+
 /**
  * team class controller
  * @class TeamController
@@ -9,9 +14,25 @@ class TeamController {
      * @param res express response
      * @param next express next function
      */
-    createTeam(req, res, next) {
-        try {
+    async createTeam(req, res, next) {
+        /** get user _id as team owner */
+        const owner = req.user._id;
 
+        try {
+            /** create team */
+            const team = await teamModel.create({...req.body, owner});
+
+            /** return error if team creation wasn't successful */
+            if (!team)
+                throwNewError('ایجاد تیم با شکست مواجه شد', 500);
+
+            /** return success response */
+            return res.status(201).json({
+                status: 201,
+                success: true,
+                message: "تیم با موفقیت ایجاد شد",
+                data: {team}
+            })
         } catch (err) {
             next(err)
         }
