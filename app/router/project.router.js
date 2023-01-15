@@ -26,6 +26,8 @@ projectRouter.get("/all", checkLogin, ProjectController.getAllProjects);
 projectRouter.get("/single/:id", checkLogin, mongoIDValidator(), expressValidatorMapper, ProjectController.getProjectById);
 /** define remove single project router */
 projectRouter.delete("/remove/:id", checkLogin, mongoIDValidator(), expressValidatorMapper, ProjectController.removeProject);
+/** define edit project router */
+projectRouter.patch("/edit/:id", checkLogin, mongoIDValidator(), createProjectValidator(), expressValidatorMapper, ProjectController.updateProject);
 
 /** export project router */
 module.exports = {

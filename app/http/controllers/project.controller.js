@@ -138,10 +138,64 @@ class ProjectController {
      * @param res express response
      * @param next express next function
      */
-    updateProject(req, res, next) {
-        try {
+    async updateProject(req, res, next) {
+        /** get user _id as project owner */
+        const owner = req.user._id;
+        /** get project id from request */
+        const {id: projectId} = req.params;
+        /** extract data from request */
+        const data = req.body;
+        /**
+         * define an array of the name of the fields that user can edit
+         * @type {string[]}
+         */
+        const fields = ["title", "description", "tags"];
+        /**
+         * define an array of the invalid values
+         * @type {(string|number|number)[]}
+         */
+        const invalidValues = ["", " ", null, undefined, 0, -1, NaN]
 
-        } catch (err) {
+        try {
+            /** get project data */
+            await this.findProject("_id", projectId, owner);
+
+            /** loop over data entries */
+            Object.entries(data).forEach(([key, value]) => {
+                /** remove entry from data if user is not allow to edit it */
+                if (!fields.includes(key)) delete data[key];
+
+                /** remove entry from data if it has a bad value */
+                if (invalidValues.includes(value)) delete data[key];
+
+                /** proceed if key is equal too tags, and it is an array */
+                if (key === "tags" && (data['tags'].constructor === Array)) {
+                    /** filter tags value and only keeps valid values */
+                    data["tags"] = data["tags"].filter(val => {
+                        /** keep value if it's not included in invalid values */
+                        if (!invalidValues.includes(val)) return val
+                    })
+
+                    /** removed tags if the length of array is 0 */
+                    if (data['tags'].length === 0) delete data['tags']
+                }
+            });
+
+            /** update project data */
+            const updateProject = await projectModel.updateOne({_id: projectId}, {$set: {...data}});
+
+            /** throw error if update wasn't successful */
+            if (updateProject.modifiedCount <= 0)
+                throwNewError("بروزرسانی انجام نشد", 400);
+
+            /** return success response */
+            return res.status(200).json({
+                status: 200,
+                success: true,
+                message: "اطلاعات با موفقیت بروزرسانی شد",
+            })
+        } catch
+            (err) {
             next(err)
         }
     }
@@ -225,6 +279,7 @@ class ProjectController {
 }
 
 /** export class controller */
-module.exports = {
+module
+    .exports = {
     ProjectController: new ProjectController()
 }
