@@ -16,3 +16,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlNOV
   "email": "saeed_nowrouzi98@hotmail.com",
   "password": "12345678900"
 }
+
+### get user team invitations
+GET http://localhost:3000/user/invitations
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InNhZWVkLm5vcm91emkiLCJpYXQiOjE2NzM4OTE1NjYsImV4cCI6MTcwNTQyNzU2Nn0.rdOAeoYphKmoH091yXhTP8CjYiawwWY1bQgc2ExBEaE

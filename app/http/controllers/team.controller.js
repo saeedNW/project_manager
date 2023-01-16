@@ -72,7 +72,7 @@ class TeamController {
 
         try {
             /** get team data from database */
-            const team = await this.findTeams("_id", teamId, false, owner);
+            await this.findTeams("_id", teamId, false, owner);
 
             /** get user data from database */
             const invitedUser = await userModel.findOne({username});
