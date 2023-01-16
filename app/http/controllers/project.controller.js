@@ -261,7 +261,9 @@ class ProjectController {
 
             /** return error if project didn't removed */
             if (removedProject.deleteCount <= 0)
-                throwNewError("درخواست ناموفق، لطفا مجددا تلاش نمایید", 400);
+                throwNewError("درخواست ناموفق، لطفا مجددا تلاش نمایید", 500);
+
+            /** todo@ send notify to project team's users */
 
             /** return success response */
             return res.status(200).json({
