@@ -22,6 +22,8 @@ userRouter.patch("/profile", checkLogin, UserController.editUserProfile);
 userRouter.patch("/profile-image", checkLogin, upload_multer.single("image"), imageValidator(), expressValidatorMapper, UserController.updateProfileImage);
 /** define user git invitations router */
 userRouter.get("/invitations", checkLogin, UserController.getUserInvitations);
+/** define user git invitations by status router */
+userRouter.get("/invitations/:status", checkLogin, UserController.getUserInvitationsByStatus);
 
 /** export user router */
 module.exports = {

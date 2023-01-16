@@ -197,7 +197,74 @@ class UserController {
                 success: true,
                 message: "درخواست شما با موفقیت انجام شد",
                 data: {invitations}
-            })
+            });
+        } catch (err) {
+            next(err)
+        }
+    }
+
+    /**
+     * get user's teams' invitations by status
+     * @param req express request
+     * @param res express response
+     * @param next express next function
+     */
+    async getUserInvitationsByStatus(req, res, next) {
+        /** get user id from request */
+        const userId = req.user._id;
+        /** get status from request */
+        const status = req.params.status.toLowerCase();
+
+        try {
+            /** get user invitations by status from database */
+            let invitations = await userModel.aggregate([
+                {
+                    /**
+                     * match option
+                     * search for a user that has the same _id as "userId"
+                     */
+                    $match: {
+                        _id: userId
+                    }
+                },
+                {
+                    /**
+                     * project option
+                     */
+                    $project: {
+                        /** remove user "_id" field */
+                        _id: 0,
+                        /** get user "inviteRequests" field */
+                        inviteRequests: 1,
+                        /** create new field with tha name of invitations */
+                        invitations: {
+                            /** filter "inviteRequests" field data and store them in "invitations" */
+                            $filter: {
+                                /** define filter input (the field that you want to filter its data) */
+                                input: "$inviteRequests",
+                                /** set a variable name for filter output */
+                                as: "invitation",
+                                /** define a condition for filter */
+                                cond: {
+                                    /** get data that has status equal to "status" */
+                                    $eq: ["$$invitation.status", status]
+                                }
+                            }
+                        }
+                    }
+                }
+            ]);
+
+            /** change invitation result structure */
+            invitations = invitations?.[0]?.invitations || [];
+
+            /** return success response */
+            return res.status(200).json({
+                status: 200,
+                success: true,
+                message: "درخواست شما با موفقیت انجام شد",
+                data: {invitations}
+            });
         } catch (err) {
             next(err)
         }
