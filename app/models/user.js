@@ -2,6 +2,29 @@
 const {default: mongoose} = require("mongoose");
 
 /**
+ * define user teams invitation model schema
+ */
+const InviteRequest = new mongoose.Schema({
+    teamId: {
+        type: mongoose.Types.ObjectId,
+        required: true
+    },
+    caller: {
+        type: String,
+        required: true,
+        lowercase: true
+    },
+    requestDate: {
+        type: Date,
+        default: new Date()
+    },
+    status: {
+        type: String,
+        default: "pending" /** pending, accepted, rejected */
+    }
+})
+
+/**
  * define user database model schema
  */
 const UserSchema = new mongoose.Schema({
@@ -27,7 +50,8 @@ const UserSchema = new mongoose.Schema({
     email: {
         type: String,
         required: true,
-        unique: true
+        unique: true,
+        lowercase: true
     },
     password: {
         type: String,
@@ -44,6 +68,9 @@ const UserSchema = new mongoose.Schema({
         type: [String],
         default: []
     },
+    inviteRequests: {
+        type: [InviteRequest]
+    }
 }, {
     timestamps: true
 });

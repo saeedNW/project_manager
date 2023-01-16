@@ -28,3 +28,8 @@ Content-Type: application/json
 DELETE http://localhost:3000/team/remove/63c4661205dab32b2e562e4d
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlNOVzEzIiwiaWF0IjoxNjczNDM0NzMwLCJleHAiOjE3MDQ5NzA3MzB9.DNO0kV3GcwMui02LOmUt14VPlCBIIqyymvJWAxqdCog
 Content-Type: application/json
+
+### invite user to team
+GET http://localhost:3000/team/invite/63c54e24e5595e55ec72a821/saeed.norouzi
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlNOVzEzIiwiaWF0IjoxNjczNDM0NzMwLCJleHAiOjE3MDQ5NzA3MzB9.DNO0kV3GcwMui02LOmUt14VPlCBIIqyymvJWAxqdCog
+Content-Type: application/json

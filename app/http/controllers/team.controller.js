@@ -4,6 +4,8 @@ const {teamModel} = require("../../models/team");
 const {throwNewError} = require("../../modules/functions");
 /** import auto-bind module */
 const autoBind = require("auto-bind");
+/** import user model */
+const {userModel} = require("../../models/user");
 
 /**
  * team class controller
@@ -60,9 +62,73 @@ class TeamController {
      * @param res express response
      * @param next express next function
      */
-    inviteUserToTeam(req, res, next) {
-        try {
+    async inviteUserToTeam(req, res, next) {
+        /** get chosen user's username and team id from request */
+        const {username, teamId} = req.params;
+        /** get user _id as team owner */
+        const owner = req.user._id;
+        /** get user's username as inviterName */
+        const {username: inviterName} = req.user;
 
+        try {
+            /** get team data from database */
+            const team = await this.findTeams("_id", teamId, false, owner);
+
+            /** get user data from database */
+            const invitedUser = await userModel.findOne({username});
+
+            /** return error if user was not found */
+            if (!invitedUser)
+                throwNewError("کاربری با این اطلاعات پیدا نشد", 404);
+
+            /** check if user already has been added to the team */
+            const findUserInTeam = await teamModel.findOne({
+                $or: [
+                    {owner: invitedUser._id},
+                    {users: invitedUser._id},
+                ],
+                _id: teamId
+            });
+
+            /** return error if user already has been added to the team */
+            if (findUserInTeam)
+                throwNewError("کاربر قبلا به این تیم افزوده شده است", 400);
+
+            /**
+             * define invitation data
+             * @type {{caller, teamId: *, requestDate: Date, status: string}}
+             */
+            const invitationData = {
+                caller: inviterName,
+                requestDate: new Date(),
+                teamId,
+                status: "pending",
+            };
+
+            /** loop over user invitations */
+            for (const invitation of invitedUser.inviteRequests)
+                /** check if invitation already has been sent to user */
+                if (invitation.teamId.toString() === invitationData.teamId.toString())
+                    /** return error if there is an invitation to this team in user's invitations */
+                    throwNewError("کاربر قبلا به این تیم دعوت شده است", 400);
+
+            /** add invitation to user's data */
+            const updatedUser = await userModel.updateOne({username}, {
+                $push: {
+                    inviteRequests: invitationData
+                },
+            });
+
+            /** throw error if update wasn't successful */
+            if (updatedUser.modifiedCount <= 0)
+                throwNewError("ارسال دعوت نامه با شکست مواجه شد، لطفا مجددا تلاش نمایید", 400);
+
+            /** send success response */
+            return res.status(200).json({
+                status: 200,
+                success: true,
+                message: "ثبت درخواست با موفقیت انجام شد",
+            });
         } catch (err) {
             next(err)
         }
