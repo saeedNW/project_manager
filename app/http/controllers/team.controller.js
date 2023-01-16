@@ -32,8 +32,11 @@ class TeamController {
         const owner = req.user._id;
 
         try {
+            /** add team owner in team users' */
+            const users = [owner]
+
             /** create team */
-            const team = await teamModel.create({...req.body, owner});
+            const team = await teamModel.create({...req.body, owner, users});
 
             /** return error if team creation wasn't successful */
             if (!team)
@@ -144,7 +147,7 @@ class TeamController {
 
         try {
             /** get team data */
-            const team = await this.findTeam("_id", teamId, owner);
+            const team = await this.findTeams("_id", teamId, false, owner);
 
             /** return success response */
             return res.status(200).json({
@@ -164,9 +167,24 @@ class TeamController {
      * @param res express response
      * @param next express next function
      */
-    getTeamsByUser(req, res, next) {
-        try {
+    async getTeamsByUser(req, res, next) {
+        /** get user id from request */
+        const userId = req.user._id;
 
+        try {
+            /** get user teams */
+            const teams = await this.findTeams("$or", [
+                {owner: userId},
+                {users: userId},
+            ], true);
+
+            /** return success response */
+            return res.status(200).json({
+                status: 200,
+                success: true,
+                message: "درخواست شما با موفقیت به اتمام رسید",
+                data: {teams}
+            });
         } catch (err) {
             next(err)
         }
@@ -189,11 +207,12 @@ class TeamController {
     /**
      * find and return team data based on given search options
      * @param {string} mainSearchFiledName the name of the main filed that you want to search based on. like "_id" or "user"
-     * @param {string} mainSearchFiledValue the value of the main filed that you want to search based on.
+     * @param {string|object} mainSearchFiledValue the value of the main filed that you want to search based on.
+     * @param {boolean} multiplyTeams checking whether to return multiple teams or just one team
      * @param {string|null} owner team owner ObjectId
      * @returns {Promise<*>}
      */
-    async findTeam(mainSearchFiledName, mainSearchFiledValue, owner = null) {
+    async findTeams(mainSearchFiledName, mainSearchFiledValue, multiplyTeams = false, owner = null) {
         /** define search query */
         const query = {
             [mainSearchFiledName]: mainSearchFiledValue
@@ -204,7 +223,7 @@ class TeamController {
             query["owner"] = owner;
 
         /** get team from database */
-        const team = await teamModel.findOne({...query});
+        const team = !multiplyTeams ? await teamModel.findOne({...query}) : await teamModel.find({...query});
 
         /** return error if team was not found */
         if (!team)

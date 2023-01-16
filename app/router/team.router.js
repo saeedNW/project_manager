@@ -20,6 +20,8 @@ teamRouter.post("/create", checkLogin, createTeamValidation(), expressValidatorM
 teamRouter.get("/list-all", checkLogin, TeamController.getAllTeams);
 /** define get single team by id router */
 teamRouter.get("/single/:id", checkLogin, mongoIDValidator(), expressValidatorMapper, TeamController.getTeamById);
+/** define get all teams router */
+teamRouter.get("/user-teams", checkLogin, TeamController.getTeamsByUser);
 
 /** export team router */
 module.exports = {
