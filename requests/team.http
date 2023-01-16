@@ -23,3 +23,8 @@ Content-Type: application/json
 GET http://localhost:3000/team/user-teams
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlNOVzEzIiwiaWF0IjoxNjczNDM0NzMwLCJleHAiOjE3MDQ5NzA3MzB9.DNO0kV3GcwMui02LOmUt14VPlCBIIqyymvJWAxqdCog
 Content-Type: application/json
+
+### team removal
+DELETE http://localhost:3000/team/remove/63c4661205dab32b2e562e4d
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlNOVzEzIiwiaWF0IjoxNjczNDM0NzMwLCJleHAiOjE3MDQ5NzA3MzB9.DNO0kV3GcwMui02LOmUt14VPlCBIIqyymvJWAxqdCog
+Content-Type: application/json

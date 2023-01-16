@@ -22,6 +22,8 @@ teamRouter.get("/list-all", checkLogin, TeamController.getAllTeams);
 teamRouter.get("/single/:id", checkLogin, mongoIDValidator(), expressValidatorMapper, TeamController.getTeamById);
 /** define get all teams router */
 teamRouter.get("/user-teams", checkLogin, TeamController.getTeamsByUser);
+/** define single team remove router */
+teamRouter.delete("/remove/:id", checkLogin, mongoIDValidator(), expressValidatorMapper, TeamController.removeTeam);
 
 /** export team router */
 module.exports = {

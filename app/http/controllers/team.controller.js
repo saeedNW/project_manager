@@ -102,9 +102,34 @@ class TeamController {
      * @param res express response
      * @param next express next function
      */
-    removeTeam(req, res, next) {
-        try {
+    async removeTeam(req, res, next) {
+        /** get user _id as team owner */
+        const owner = req.user._id;
+        /** get team id from request */
+        const {id: teamId} = req.params;
 
+        try {
+            /** get team data */
+            await this.findTeams("_id", teamId, false, owner);
+
+            /** remove team */
+            const removedTeam = await teamModel.deleteOne({_id: teamId});
+
+            /** return error if project didn't removed */
+            if (removedTeam.deleteCount <= 0)
+                throwNewError("درخواست ناموفق، لطفا مجددا تلاش نمایید", 500);
+
+            /** todo@ send notify to team's users */
+
+            /** todo@ remove team from projects */
+
+            /** return success response */
+            return res.status(200).json({
+                status: 200,
+                success: true,
+                message: "درخواست شما با موفقیت به اتمام رسید",
+                data: {removedTeam}
+            });
         } catch (err) {
             next(err)
         }
