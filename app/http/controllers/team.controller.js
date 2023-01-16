@@ -305,10 +305,38 @@ class TeamController {
 
         try {
             /** get user teams */
-            const teams = await this.findTeams("$or", [
-                {owner: userId},
-                {users: userId},
-            ], true);
+            const teams = await teamModel.aggregate([
+                {
+                    $match: {
+                        $or: [{owner: userId}, {users: userId}]
+                    },
+                },
+                {
+                    $lookup: {
+                        from: "users",
+                        localField: "owner",
+                        foreignField: "_id",
+                        as: "owner"
+                    }
+                },
+                {
+                    $project: {
+                        "owner.roles": 0,
+                        "owner.password": 0,
+                        "owner.token": 0,
+                        "owner.teams": 0,
+                        "owner.skills": 0,
+                        "owner.inviteRequests": 0,
+                        "owner.createdAt": 0,
+                        "owner.updatedAt": 0,
+                        "owner.team": 0,
+                        "owner.__v": 0,
+                    }
+                },
+                {
+                    $unwind: "$owner"
+                }
+            ]);
 
             /** return success response */
             return res.status(200).json({
