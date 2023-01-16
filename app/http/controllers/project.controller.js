@@ -293,7 +293,7 @@ class ProjectController {
      * find and return project data based on given search options
      * @param {string} mainSearchFiledName the name of the main filed that you want to search based on. like "_id" or "user"
      * @param {string} mainSearchFiledValue the value of the main filed that you want to search based on.
-     * @param {string|null} owner
+     * @param {string|null} owner project owner ObjectId
      * @returns {Promise<*>}
      */
     async findProject(mainSearchFiledName, mainSearchFiledValue, owner = null) {
@@ -311,7 +311,7 @@ class ProjectController {
 
         /** return error if project was not found */
         if (!project)
-            throwNewError("پروژه ای با این شنایه یافت نشد", 404);
+            throwNewError("پروژه ای با این مشخصات یافت نشد", 404);
 
         /** return project data */
         return project;
