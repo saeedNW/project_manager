@@ -13,6 +13,8 @@ const {upload_multer} = require("../modules/multer");
 const {imageValidator} = require("../http/validators/user.validator");
 /** import express validator mapper middleware */
 const {expressValidatorMapper} = require("../http/middlewares/express.validator.mapper");
+/** import mongodb object id validation */
+const {mongoIDValidator} = require("../http/validators/public.validator");
 
 /** define user profile router */
 userRouter.get("/profile", checkLogin, UserController.getUserProfile);
@@ -22,6 +24,8 @@ userRouter.patch("/profile", checkLogin, UserController.editUserProfile);
 userRouter.patch("/profile-image", checkLogin, upload_multer.single("image"), imageValidator(), expressValidatorMapper, UserController.updateProfileImage);
 /** define user git invitations router */
 userRouter.get("/invitations", checkLogin, UserController.getUserInvitations);
+/** define user invitations status update (accept/reject) router */
+userRouter.get("/invitations/update/:id/:status", checkLogin, mongoIDValidator(), expressValidatorMapper, UserController.updateInvitationStatus)
 /** define user git invitations by status router */
 userRouter.get("/invitations/:status", checkLogin, UserController.getUserInvitationsByStatus);
 

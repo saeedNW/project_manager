@@ -26,3 +26,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InNhZ
 GET http://localhost:3000/user/invitations/pending
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InNhZWVkLm5vcm91emkiLCJpYXQiOjE2NzM4OTE1NjYsImV4cCI6MTcwNTQyNzU2Nn0.rdOAeoYphKmoH091yXhTP8CjYiawwWY1bQgc2ExBEaE
+
+### update user invitation status
+GET http://localhost:3000/user/invitations/update/63c550745928290808518991/accepted
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InNhZWVkLm5vcm91emkiLCJpYXQiOjE2NzM4OTE1NjYsImV4cCI6MTcwNTQyNzU2Nn0.rdOAeoYphKmoH091yXhTP8CjYiawwWY1bQgc2ExBEaE

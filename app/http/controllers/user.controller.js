@@ -7,6 +7,8 @@ const {
 } = require("../../modules/functions");
 /** import user model */
 const {userModel} = require("../../models/user");
+/** import team model */
+const {teamModel} = require("../../models/team");
 
 /**
  * user class controller
@@ -271,28 +273,72 @@ class UserController {
     }
 
     /**
-     * accept team invitation
+     * update team invitation status
      * @param req express request
      * @param res express response
      * @param next express next function
      */
-    acceptTeamInvitation(req, res, next) {
+    async updateInvitationStatus(req, res, next) {
+        /** get data from request params */
+        const {id: invitationId, status} = req.params;
+        /** get user id from request */
+        const userId = req.user;
+
         try {
+            /** return error if status has an invalid value */
+            if (!["accepted", "rejected"].includes(status.toLowerCase()))
+                throwNewError("اطلاعات ارسالی صحیح نمی باشند", 400);
 
-        } catch (err) {
-            next(err)
-        }
-    }
+            /** get user whom invitation belongs to */
+            const invitedUser = await userModel.findOne({"inviteRequests._id": invitationId, _id: userId});
 
-    /**
-     * reject team invitation
-     * @param req express request
-     * @param res express response
-     * @param next express next function
-     */
-    rejectTeamInvitation(req, res, next) {
-        try {
+            /** return error if user was not found */
+            if (!invitedUser)
+                throwNewError("درخواستی با این مشخصات پیدا نشد", 404);
 
+            /** extract invitation from user data */
+            const findRequest = invitedUser.inviteRequests.find(item => item.id.toString() === invitationId.toString());
+
+            /** return error if invitation was already accepted or rejected */
+            if (findRequest.status.toLowerCase() !== "pending")
+                throwNewError("دعوتنامه مورد نظر قبلا پردازش شده است", 400);
+
+            /** update user invitation */
+            const updatedInvitation = await userModel.updateOne({"inviteRequests._id": invitationId}, {
+                $set: {"inviteRequests.$.status": status.toLowerCase()}
+            });
+
+            /** return error if invitation update was not successful */
+            if (updatedInvitation.modifiedCount === 0)
+                throwNewError("درخواست با مشکل مواجه شد لطفا مجددا تلاش نمایید", 400);
+
+            /** proceed with adding suer to team data if user has accepted the invitation */
+            if (status.toLowerCase() === "accepted") {
+                /** add user to team users */
+                const updatedTeam = await teamModel.updateOne({_id: findRequest.teamId}, {
+                    $push: {
+                        users: userId
+                    }
+                });
+
+                /** proceed if team update was not successful */
+                if (updatedTeam.modifiedCount === 0) {
+                    /** revert user invitation status to pending */
+                    await userModel.updateOne({"inviteRequests._id": invitationId}, {
+                        $set: {"inviteRequests.$.status": "pending"}
+                    });
+
+                    /** return error if team update was not successful */
+                    throwNewError("درخواست با مشکل مواجه شد لطفا مجددا تلاش نمایید", 400);
+                }
+            }
+
+            /** return success message */
+            return res.status(200).json({
+                status: 200,
+                success: true,
+                message: "درخواست با موفقیت به انجام رسید "
+            });
         } catch (err) {
             next(err)
         }
