@@ -33,3 +33,13 @@ Content-Type: application/json
 GET http://localhost:3000/team/invite/63c54e24e5595e55ec72a821/saeed.norouzi
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlNOVzEzIiwiaWF0IjoxNjczNDM0NzMwLCJleHAiOjE3MDQ5NzA3MzB9.DNO0kV3GcwMui02LOmUt14VPlCBIIqyymvJWAxqdCog
 Content-Type: application/json
+
+### edit team by id
+PATCH http://localhost:3000/team/update/63c54e24e5595e55ec72a821
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlNOVzEzIiwiaWF0IjoxNjczNDM0NzMwLCJleHAiOjE3MDQ5NzA3MzB9.DNO0kV3GcwMui02LOmUt14VPlCBIIqyymvJWAxqdCog
+Content-Type: application/json
+
+{
+  "title" : "saeed Team A",
+  "description" : "best developers team"
+}

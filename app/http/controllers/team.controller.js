@@ -64,7 +64,7 @@ class TeamController {
      */
     async inviteUserToTeam(req, res, next) {
         /** get chosen user's username and team id from request */
-        const {username, teamId} = req.params;
+        const {username, id: teamId} = req.params;
         /** get user _id as team owner */
         const owner = req.user._id;
         /** get user's username as inviterName */
@@ -154,9 +154,50 @@ class TeamController {
      * @param res express response
      * @param next express next function
      */
-    updateTeam(req, res, next) {
-        try {
+    async updateTeam(req, res, next) {
+        /** get user _id as team owner */
+        const owner = req.user._id;
+        /** get team id from request */
+        const {id: teamId} = req.params;
+        /** extract data from request  body */
+        const data = {...req.body};
+        /**
+         * define an array of the name of the fields that user can edit
+         * @type {string[]}
+         */
+        const fields = ["title", "description"];
+        /**
+         * define an array of the invalid values
+         * @type {(string|number|number)[]}
+         */
+        const invalidValues = ["", " ", null, undefined, 0, -1, NaN]
 
+        try {
+            /** check team existence */
+            await this.findTeams("_id", teamId, false, owner);
+
+            /** loop over data entries */
+            Object.entries(data).forEach(([key, value]) => {
+                /** remove entry from data if user is not allow to edit it */
+                if (!fields.includes(key)) delete data[key];
+
+                /** remove entry from data if it has a bad value */
+                if (invalidValues.includes(value)) delete data[key];
+            });
+
+            /** update team data */
+            const updateTeam = await teamModel.updateOne({_id: teamId}, {$set: {...data}});
+
+            /** throw error if update wasn't successful */
+            if (updateTeam.modifiedCount <= 0)
+                throwNewError("بروزرسانی انجام نشد", 500);
+
+            /** return success response */
+            return res.status(200).json({
+                status: 200,
+                success: true,
+                message: "اطلاعات با موفقیت بروزرسانی شد",
+            });
         } catch (err) {
             next(err)
         }
