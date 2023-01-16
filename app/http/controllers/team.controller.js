@@ -2,12 +2,25 @@
 const {teamModel} = require("../../models/team");
 /** import error sender function */
 const {throwNewError} = require("../../modules/functions");
+/** import auto-bind module */
+const autoBind = require("auto-bind");
 
 /**
  * team class controller
  * @class TeamController
  */
 class TeamController {
+    /**
+     * TeamController class constructor
+     */
+    constructor() {
+        /**
+         * use auto-bind module to bind "this"
+         * to the TeamController class
+         */
+        autoBind(this);
+    }
+
     /**
      * team creation controller
      * @param req express request
@@ -123,9 +136,23 @@ class TeamController {
      * @param res express response
      * @param next express next function
      */
-    getTeamById(req, res, next) {
-        try {
+    async getTeamById(req, res, next) {
+        /** get user _id as project owner */
+        const owner = req.user._id;
+        /** get project id from request */
+        const {id: teamId} = req.params;
 
+        try {
+            /** get team data */
+            const team = await this.findTeam("_id", teamId, owner);
+
+            /** return success response */
+            return res.status(200).json({
+                status: 200,
+                success: true,
+                message: "درخواست شما با موفقیت به اتمام رسید",
+                data: {team}
+            });
         } catch (err) {
             next(err)
         }
@@ -157,6 +184,34 @@ class TeamController {
         } catch (err) {
             next(err)
         }
+    }
+
+    /**
+     * find and return team data based on given search options
+     * @param {string} mainSearchFiledName the name of the main filed that you want to search based on. like "_id" or "user"
+     * @param {string} mainSearchFiledValue the value of the main filed that you want to search based on.
+     * @param {string|null} owner team owner ObjectId
+     * @returns {Promise<*>}
+     */
+    async findTeam(mainSearchFiledName, mainSearchFiledValue, owner = null) {
+        /** define search query */
+        const query = {
+            [mainSearchFiledName]: mainSearchFiledValue
+        };
+
+        /** add owner option to search query if it wasn't null */
+        if (owner)
+            query["owner"] = owner;
+
+        /** get team from database */
+        const team = await teamModel.findOne({...query});
+
+        /** return error if team was not found */
+        if (!team)
+            throwNewError("تیمی با این مشخصات یافت نشد", 404);
+
+        /** return team data */
+        return team;
     }
 }
 
