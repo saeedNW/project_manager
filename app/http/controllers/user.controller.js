@@ -303,6 +303,13 @@ class UserController {
             if (findRequest.status.toLowerCase() !== "pending")
                 throwNewError("دعوتنامه مورد نظر قبلا پردازش شده است", 400);
 
+            /** check team existence */
+            const team = await teamModel.findOne({_id: findRequest.teamId});
+
+            /** return error if request was to accept invitation and team was not found */
+            if (!team && status.toLowerCase() === "accepted")
+                throwNewError("تیم مورد نظر شما یافت نشد", 404);
+
             /** update user invitation */
             const updatedInvitation = await userModel.updateOne({"inviteRequests._id": invitationId}, {
                 $set: {"inviteRequests.$.status": status.toLowerCase()}
