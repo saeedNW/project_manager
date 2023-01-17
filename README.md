@@ -8,7 +8,7 @@ a simple project and team management application
 
 ### project [trello board](https://trello.com/b/sKfPuJ0u/project-management)
 
-### project [documentation and wiki](https://github.com/saeedNW/project_manager/wiki/Introduction) (Writing ...)
+### project [documentation and wiki](https://github.com/saeedNW/project_manager/wiki/%2301.-Introduction) (Writing ...)
 
 ***
 
