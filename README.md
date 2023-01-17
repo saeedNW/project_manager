@@ -75,7 +75,25 @@ login required data example
 }
 ```
 
-### Note: after logging into system you need to copy your access token and replace it with access token in http request files.
+### Note #1: after logging into system you need to copy your access token and replace it with access token in http request files.
+
+if you're using a code editor such as ```VSCode``` or other code editor which support using environment variables in
+http files, you can also save your access token in ```.env``` file and call the ENV variable instead of replacing the
+whole token in http files.
+
+http request with access token example
+
+```http request
+### get user profile (in editors which doesn't support ENV variables in http files)
+GET http://localhost:3000/user/profile
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlNOVzEzIiwiaWF0IjoxNjczNDM0NzMwLCJleHAiOjE3MDQ5NzA3MzB9.DNO0kV3GcwMui02LOmUt14VPlCBIIqyymvJWAxqdCog
+
+### get user profile (in editors which does support ENV variables in http files such as VSCode)
+GET http://localhost:3000/user/profile
+Content-Type: application/json
+Authorization: Bearer {{$dotenv token}}
+```
 
 #### your access token is valid for 1 year
 
